@@ -6,7 +6,7 @@ describe("blinkyDancer", function() {
 
   beforeEach(function() {
     clock = sinon.useFakeTimers();
-    blinkyDancer = makeBlinkyDancer(10, 20, timeBetweenSteps);
+    blinkyDancer = makeBlinkyDancer(10, 20, timeBetweenSteps, function(){this.$node.toggle()});
   });
 
   it("should have a jQuery $node object", function(){
