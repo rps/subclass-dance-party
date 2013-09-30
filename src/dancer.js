@@ -8,29 +8,21 @@ var Dancer = function(top, left, timeBetweenSteps, doSomething){
 }
 
 Dancer.prototype.step = function(){
+  
   var that = this;
-  // debugger;
   this.doSomething();
+
   setTimeout(
     function(){
-     (function(context){context.step()})(that)
-      
+      (function(context){
+      context.step();
+      })(that)
     }
-    // (function(context){context.step()})(that)
     ,that.timeBetweenSteps
-    )
-   // setTimeout(
-   //  function(){
-   //   (function(context){context.step()})(that)
-      
-   //  }
-   //  // (function(context){context.step()})(that)
-   //  ,that.timeBetweenSteps
-   //  )
-
+  );
 }
 
-Dancer.prototype.setPosition = function(top, left){
-  this.top = top;
-  this.left = left;
-}
+// Dancer.prototype.setPosition = function(top, left){
+//   this.top = top;
+//   this.left = left;
+// }
