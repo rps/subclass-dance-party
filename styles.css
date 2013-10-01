@@ -20,8 +20,38 @@ body, a:link, a:visited, a:active{
 .title{
   background-color: #777;
 }
-.dancer{
+.blinkyDancer{
   border:10px solid red;
   border-radius:10px;
   position:absolute;
+}
+.yellowDancer{
+  margin: 0;
+  padding: 0;
+  position:absolute;
+  background-image: url('smiley.gif');
+  background-size: 40px;
+  width: 40px;
+  height: 40px;
+  background-repeat: no-repeat;
+}
+.squareMover{
+  border:10px solid green;
+  border-radius:0px;
+  position:absolute;
+}
+.crawler{
+  margin: 0;
+  padding: 0;
+  position:absolute;
+  background-image: url('kodama.gif');
+  background-size: 64px;
+  width: 64px;
+  height: 64px;
+  background-repeat: no-repeat;
+}
+.raindrop{
+  border:10px solid blue;
+  position:absolute;
+  border-radius: 15px 3px 3px 3px;
 }

@@ -1,5 +1,7 @@
 var BlinkyDancer = function(top, left, timeBetweenSteps){
-  Dancer.call(this,top,left,timeBetweenSteps,function(){this.$node.toggle()});
+  this.does = function(){this.$node.toggle()};
+  this.kind = 'blinkyDancer';
+  Dancer.call(this,top,left,timeBetweenSteps,this.kind,this.does);
   this.step();
 };
 
