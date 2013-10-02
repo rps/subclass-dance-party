@@ -10,3 +10,7 @@ var Raindrop = function(top, left, timeBetweenSteps){
 
 Raindrop.prototype = new Dancer();
 Raindrop.prototype.constructor = Raindrop;
+
+
+// should settimeout to delete raindrops
+

@@ -3,8 +3,9 @@ body, html{
 }
 body{
   margin: 0px;
-  background-color:#444;
+  background-color:#FFFFFF;
   font-size: 18px;
+  background-image: url('road.jpg');
 }
 body, a:link, a:visited, a:active{
   color: lightblue;
@@ -25,20 +26,55 @@ body, a:link, a:visited, a:active{
   border-radius:10px;
   position:absolute;
 }
-.yellowDancer{
+.person1{
   margin: 0;
   padding: 0;
   position:absolute;
-  background-image: url('smiley.gif');
-  background-size: 40px;
-  width: 40px;
-  height: 40px;
+  background-image: url('person1.gif');
+  background-size: 50px;
+  width: 50px;
+  height: 50px;
   background-repeat: no-repeat;
 }
-.squareMover{
-  border:10px solid green;
-  border-radius:0px;
+.person2{
+  margin: 0;
+  padding: 0;
   position:absolute;
+  background-image: url('person2.gif');
+  background-size: 50px;
+  width: 50px;
+  height: 50px;
+  background-repeat: no-repeat;
+}
+.person3{
+  margin: 0;
+  padding: 0;
+  position:absolute;
+  background-image: url('person3.gif');
+  background-size: 50px;
+  width: 50px;
+  height: 50px;
+  background-repeat: no-repeat;
+}
+.airstrike{
+  margin: 0;
+  padding: 0;
+  position:absolute;
+  background-image: url('mushroomcloud.gif');
+  background-size: 100px;
+  width: 1000px;
+  height: 1000px;
+  background-repeat: no-repeat;
+}
+.bomb{
+  margin: 0;
+  padding: 0;
+  position:absolute;
+  background-image: url('mine.png');
+  background-size: 20px;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
 }
 .crawler{
   margin: 0;
@@ -53,5 +89,10 @@ body, a:link, a:visited, a:active{
 .raindrop{
   border:10px solid blue;
   position:absolute;
-  border-radius: 15px 3px 3px 3px;
+  border-radius: 15px 5px 5px 5px;
+  -webkit-transform: rotate(-135deg)  
+}
+@-webkit-keyframes spin {
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
 }

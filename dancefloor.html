@@ -5,11 +5,12 @@
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="lib/jquery.js"></script>
     <script src="src/dancer.js"></script>
-    <script src="src/blinkyDancer.js"></script>
-    <script src="src/yellowDancer.js"></script>
-    <script src="src/squareMover.js"></script>
+    <!--script src="src/blinkyDancer.js"></script-->
+    <script src="src/human.js"></script>
     <script src="src/crawler.js"></script>
     <script src="src/raindrop.js"></script>
+    <script src="src/bomb.js"></script>    
+    <script src="src/airstrike.js"></script>
     
     
   </head>
@@ -18,11 +19,11 @@
     <div class="topbar">
       <span class="title">object dance party</span>
       <a href="#" class="lineUp">lineup</a>      
-      <a href="#" class="addDancerButton" data-dancer-maker-function-name="BlinkyDancer">add a blinky dancer</a>
-      <a href="#" class="addDancerButton" data-dancer-maker-function-name="YellowDancer">add a yellow dancer</a>
-      <a href="#" class="addDancerButton" data-dancer-maker-function-name="SquareMover">add a square mover</a>      
-      <a href="#" class="addDancerButton" data-dancer-maker-function-name="Crawler">add a crawler</a>      
-      <a href="#" class="addDancerButton" data-dancer-maker-function-name="Raindrop">add a raindrop</a>      
+      <!--<a href="#" class="addDancerButton" data-dancer-maker-function-name="BlinkyDancer">add a blinky dancer</a -->
+      <a href="#" class="addDancerButton" data-dancer-maker-function-name="Human">more humans!</a>
+      <a href="#" class="addDancerButton" data-dancer-maker-function-name="Crawler">more crawlers!</a>      
+      <a href="#" class="addDancerButton" data-dancer-maker-function-name="Raindrop">make it rain</a>      
+      <a href="#" class="addDancerButton" id="boom" data-dancer-maker-function-name="Airstrike">call an airstrike</a>      
 
       
     </div>
@@ -33,42 +34,117 @@
         $('body').append("<div class='items'></div>");
 
         $(".addDancerButton").on("click", function(event){
-          /* This function sets up the click handlers for the create-dancer
-           * buttons on index.html. You should not need to alter it.
-           * As long as the "data-dancer-maker-function-name" attribute of a
-           * class="addDancerButton" DOM node matches one of the names of the
-           * maker functions available in the global scope, clicking that node
-           * will call the function to make the dancer. */
 
-          /* dancerMakerFunctionName is a string which must match
-           * one of the dancer maker functions available in global scope.
-           * A new object of the given type will be created and added
-           * to the stage.
-           */
           var dancerMakerFunctionName = $(this).data("dancer-maker-function-name");
 
           // get the maker function for the kind of dancer we're supposed to make
           var dancerMakerFunction = window[dancerMakerFunctionName];
 
-          // make a dancer with a random position
-          var dancer = new dancerMakerFunction(
-            $("body").height() * Math.random(),
-            $("body").width() * Math.random(),
-            Math.random() * 1000
-          );
-          window.dancers.push(dancer);
+          if(dancerMakerFunction !== Raindrop){
+            var dancer = new dancerMakerFunction(
+              $("body").height() * Math.random(),
+              $("body").width() * Math.random(),
+              Math.random() * 1000
+            );
+            window.dancers.push(dancer);
+          }
 
-        $('.items').append(dancer.$node);
+          setInterval(function(){window.scan()},50);
+
+
+
+          if(dancer instanceof Airstrike){
+            $('.items').append(dancer.$node.fadeIn(1250));
+            setTimeout(function(){
+              window.dancers.splice(window.dancers.indexOf(dancer),1);
+              $('.items').find(dancer.$node).fadeOut(3000,function(){$('.items').find(dancer.$node).remove();
+            });
+            },5000);
+          } else if (dancerMakerFunction === Raindrop){
+            var drops = Math.round(Math.random()*50);
+            for(var d = 0; d<drops; d++){
+              setTimeout(function(){
+                var dancer = new Raindrop(10, $("body").width() * Math.random(), 50)
+                $('.items').append(dancer.$node.fadeIn(1250));
+                setTimeout(function(){
+                  window.dancers.splice(window.dancers.indexOf(dancer),1);
+                  $('.items').find(dancer.$node).remove();
+                },15000);
+              },500*d);
+              
+            }
+          } else {
+            $('.items').append(dancer.$node);
+          }
         });
+
+        $("#boom").on("click", function(event){
+          $('html').fadeOut(1500).fadeIn(2000);
+        });
+
         $(".lineUp").on("click", function(event){
-          console.log($('.items'));
-          $('.items').find('span').remove();
           for(var i = 0; i<window.dancers.length ; i++){
             window.dancers[i].lineUp();
             $('.items').append(window.dancers[i].$node);
             
           }
         });
+        window.scan = function(){
+          for(var j = 0; j<window.dancers.length-1; j++){
+            for(var i = j+1; i<window.dancers.length; i++){
+
+
+            var x = Math.pow((window.dancers[j].top-window.dancers[i].top),2);
+            var y = Math.pow((window.dancers[j].left-window.dancers[i].left),2);
+              if(Math.sqrt(x+y) < 40){ 
+                
+                // INFECT
+                
+                if((window.dancers[i] instanceof Crawler || window.dancers[j] instanceof Crawler) && !(window.dancers[i] instanceof Crawler && window.dancers[j] instanceof Crawler)){
+                  var temp;
+
+                  if(!(window.dancers[j] instanceof Raindrop || window.dancers[i] instanceof Raindrop)){
+                    if(!(window.dancers[j] instanceof Bomb || window.dancers[j] instanceof Crawler)){
+                      temp = j;
+                    } else if (!(window.dancers[i] instanceof Bomb || window.dancers[i] instanceof Crawler)) {
+                      temp = i
+                    }
+                  }
+                  if(temp !== undefined){
+                    var zombie = new Crawler(
+                    window.dancers[temp].top,
+                    window.dancers[temp].left,
+                    Math.random() * 1000
+                    );
+                    zombie.$node.css({"background-image":"url('zombie.gif')"});
+                    window.dancers.push(zombie);
+                    $('.items').append(zombie.$node);
+                    $('.items').find(window.dancers[temp].$node).remove();
+                    window.dancers[temp].alive = false;
+                    window.dancers.splice(temp,1);
+                    temp = undefined;
+                  }
+                  
+                }
+                
+                // PROXIMITY MINE
+                if((window.dancers[i] instanceof Crawler || window.dancers[j] instanceof Crawler) && (window.dancers[i] instanceof Bomb || window.dancers[j] instanceof Bomb)){
+                  window.dancers[i].explode();
+                  window.dancers[j].explode();
+                }
+              }
+
+              // AIRSTRIKE
+              if(Math.sqrt(x+y) < 500 && (window.dancers[i] instanceof Airstrike || window.dancers[j] instanceof Airstrike)){
+                
+                (window.dancers[i] instanceof Airstrike) ? window.dancers[j].explode() : window.dancers[i].explode()
+              
+              }
+              
+            }
+          }
+        }
+        
       });
     </script>
   </body>
